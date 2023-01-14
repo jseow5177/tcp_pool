@@ -216,6 +216,8 @@ func (p *TcpConnPool) get() (*tcpConn, error) {
 
 	// Case 2: Queue a connection request
 	if p.maxOpenCount > 0 && p.numOpen >= p.maxOpenCount {
+		p.mu.Unlock()
+
 		// Create the request
 		req := &connRequest{
 			connChan: make(chan *tcpConn, 1),
